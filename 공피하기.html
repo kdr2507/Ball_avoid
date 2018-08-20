@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #box{
+            width:500px;
+            height:500px;
+            background-color: #809090;
+            position: absolute;
+            left:0px;
+            top:0px;
+        }
+        #timer{
+            width:200px;
+            height: 50px;
+            background-color: darkseagreen;
+            position: absolute;
+            font-size:35px;
+            left:500px;
+            top:0px;
+        }
+        #player{
+            position: absolute;
+            left:250px;
+            top:250px;
+        }
+        #bullet_1{
+            position: absolute;
+            left:0px;
+            top:250px;
+        }
+        #bullet_2{
+            position: absolute;
+            left:250px;
+            top:0px;
+        }
+        #bullet_3{
+            position: absolute;
+            left:250px;
+            top:485px;
+        }
+        #bullet_4{
+            position: absolute;
+            left:485px;
+            top:250px;
+        }
+    </style>
+    <script>
+        var char;
+        var char_x = 250;
+        var char_y = 250;
+        var char_speed = 3;
+
+        var one;
+        var one_x = 0;
+        var one_y = 250;
+        var one_bullet_turn = 10;
+        var one_bullet_x = 8;
+        var one_bullet_y = 13;
+
+        var two;
+        var two_x = 250;
+        var two_y = 0;
+        var two_bullet_turn = 15;
+        var two_bullet_x = 12;
+        var two_bullet_y = 13;
+
+        var three;
+        var three_x = 250;
+        var three_y = 485;
+        var three_bullet_turn = 10;
+        var three_bullet_x = 7;
+        var three_bullet_y = 14;
+
+        var four;
+        var four_x = 485;
+        var four_y = 250;
+        var four_bullet_turn = 12;
+        var four_bullet_x = 16;
+        var four_bullet_y = 8;
+
+        var keypress = new Array();
+
+        var mirise = 0;
+        var minute = 0;
+        var second = 0;
+
+
+        //-------------공의 움직임과 방향전환--------------------------------------------------
+        function bullet_1s() {
+            one_x += one_bullet_x;//첫번째 공의 x축 좌표에 계속 더해줌으로써 공이 앞으로 나아간다.
+            one_y += one_bullet_y;//첫번째 공의 y축 좌표에 계속 더해줌으로써 공이 아래로 내려간다.
+            if(one_x > 480){
+                one_bullet_x -= one_bullet_turn;//공이 오른쪽 벽에 근접할쯤 x축 좌표에 더해줄 값을 계속 빼서
+            }                                   //부호를 -로 바꿔 반대방향으로 가게끔 한다.
+            if(one_x <0){
+                one_bullet_x += one_bullet_turn;//공이 왼쪽 벽에 접근할쯤 위와 마찬가지로 x축 좌표에 더해줄 값을 계속 더해줌으로써
+            }                                   //부호를 +로 바꿔 반대방향으로 가게끔 한다.
+            if(one_y > 480){
+                one_bullet_y -= one_bullet_turn;//x축에서 했던 방식과 마찬가지로 공이 바닥에 접근하면
+            }                                   //y축을 움직이게끔 더해주는 값을 특정 변수로 빼줌으로써 부호를 -로 바꾼다.
+            if(one_y <0){
+                one_bullet_y += one_bullet_turn;
+            }
+            //---------------------------게임 종료 조건----------------------------------------------
+            if((char_x <= one_x && char_x+20 >= one_x) && (char_y <= one_y && char_y+20 >= one_y)){
+                clearInterval(one);//4개의 공 중 하나라도 플레이어에 닿으면 모든 움직임 정지
+                clearInterval(two);
+                clearInterval(three);
+                clearInterval(four);
+                clearInterval(char);
+            }
+            bullet_1.style.top = one_y + "px";
+            bullet_1.style.left = one_x + "px";
+
+
+        }
+        function bullet_2s() {
+            two_x += two_bullet_x;
+            two_y += two_bullet_y;
+            if(two_x > 480){
+                two_bullet_x -= two_bullet_turn;
+            }
+            if(two_x <0){
+                two_bullet_x += two_bullet_turn;
+            }
+            if(two_y > 480){
+                two_bullet_y -= two_bullet_turn;
+            }
+            if(two_y <0){
+                two_bullet_y += two_bullet_turn;
+            }
+            if((char_x <= two_x && char_x+20 >= two_x) && (char_y <= two_y && char_y+20 >= two_y)){
+                clearInterval(one);
+                clearInterval(two);
+                clearInterval(three);
+                clearInterval(four);
+                clearInterval(char);
+            }
+            bullet_2.style.top = two_y + "px";
+            bullet_2.style.left = two_x + "px";
+
+        }
+        function bullet_3s() {
+            three_x += three_bullet_x;
+            three_y += three_bullet_y;
+            if(three_x > 480){
+                three_bullet_x -= three_bullet_turn;
+            }
+            if(three_x <0){
+                three_bullet_x += three_bullet_turn;
+            }
+            if(three_y > 480){
+                three_bullet_y -= three_bullet_turn;
+            }
+            if(three_y <0){
+                three_bullet_y += three_bullet_turn;
+            }
+            if((char_x <= three_x && char_x+20 >= three_x) && (char_y <= three_y && char_y+20 >= three_y)){
+                clearInterval(one);
+                clearInterval(two);
+                clearInterval(three);
+                clearInterval(four);
+                clearInterval(char);
+            }
+            bullet_3.style.top = three_y + "px";
+            bullet_3.style.left = three_x + "px";
+
+        }
+        function bullet_4s() {
+            four_x += four_bullet_x;
+            four_y += four_bullet_y;
+            if(four_x > 480){
+                four_bullet_x -= four_bullet_turn;
+            }
+            if(four_x <0){
+                four_bullet_x += four_bullet_turn;
+            }
+            if(four_y > 480){
+                four_bullet_y -= four_bullet_turn;
+            }
+            if(four_y <0){
+                four_bullet_y += four_bullet_turn;
+            }
+            if((char_x <= four_x && char_x+20 >= four_x) && (char_y <= four_y && char_y+20 >= four_y)){
+                clearInterval(one);
+                clearInterval(two);
+                clearInterval(three);
+                clearInterval(four);
+                clearInterval(char);
+            }
+            bullet_4.style.top = four_y + "px";
+            bullet_4.style.left = four_x + "px";
+
+        }
+        //---------------------------게임 시작------------------------------------------------------
+        function start() {
+            one = setInterval(bullet_1s, 10);
+            two = setInterval(bullet_2s, 10);
+            three = setInterval(bullet_3s, 10);
+            four = setInterval(bullet_4s, 10);
+            char = setInterval(move,10)
+        }
+        //-----------------------------시간초------------------------------------------------
+        function timer() {
+
+            mirise++;
+            if(mirise == 100){
+                second++;
+                mirise = 0;
+            }
+            if(second == 60){
+                minute++;
+                second = 0;
+            }
+
+            document.getElementById("timer").innerHTML = minute + ":" + second + ":" + mirise;
+
+        }
+
+
+        //------------------------------캐릭터 움직임---------------------------------------------
+        function move() {
+            timer();
+            player = document.getElementById("player");
+            if(keypress[38]){//up
+                char_y -= char_speed;
+                if(char_y <= -10){
+                    char_y += char_speed;
+                }
+                player.style.top = char_y+"px";
+            }
+            else if(keypress[40]){//down
+                char_y += char_speed;
+                if(char_y >= 485){
+                    char_y -= char_speed;
+                }
+                player.style.top = char_y+"px";
+            }
+
+            if(keypress[39]){//right
+                char_x += char_speed;
+                if(char_x >= 491){
+                    char_x -= char_speed;
+                }
+                player.style.left = char_x+"px";
+            }
+            else if(keypress[37]) {//left
+                char_x -= char_speed;
+                if(char_x <= -5){
+                    char_x += char_speed;
+                }
+                player.style.left = char_x + "px";
+            }
+        }
+        function keydown(event) {
+            keypress[event.keyCode] = true;
+        }
+
+        function keyup(event) {
+            keypress[event.keyCode] = false;
+        }
+    </script>
+</head>
+<body  onkeydown="keydown(event)" onkeyup="keyup(event)" onload="start()">
+    <div id="box">
+        <span id="player">O</span>
+        <img src="bullet.png" id="bullet_1">
+        <img src="bullet.png" id="bullet_2">
+        <img src="bullet.png" id="bullet_3">
+        <img src="bullet.png" id="bullet_4">
+    </div>
+    <div id="timer" align="center"></div>
+</body>
+</html>
